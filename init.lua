@@ -40,7 +40,6 @@ What is Kickstart?
     reference for how Neovim integrates Lua.
     - :help lua-guide
     - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
 Kickstart Guide:
 
   TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
@@ -203,6 +202,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_set_keymap('n', '<leader>ce', ':Copilot enable<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>cd', ':Copilot disable<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>cs', ':Copilot status<CR>', { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<leader>ct', ':lua ToggleCopilot()<CR>', { noremap = true, silent = true })
+
+function ToggleCopilot()
+  local copilot_status = vim.fn['copilot#Enabled']()
+  if copilot_status == 1 then
+    vim.cmd 'Copilot disable'
+    print 'Copilot deaktiviert'
+  else
+    vim.cmd 'Copilot enable'
+    print 'Copilot aktiviert'
+  end
+end
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -252,6 +268,7 @@ require('lazy').setup({
   -- options to `gitsigns.nvim`.
   --
   -- See `:help gitsigns` to understand what the configuration keys do
+
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
